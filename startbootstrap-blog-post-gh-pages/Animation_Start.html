@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Splash — Animation particules + logo</title>
+  <link href="css/style_anim.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="splash" id="splash">
+    <!-- Core energy point -->
+    <div class="core" id="core"></div>
+
+    <!-- Particles (many elements; you can generate them in JS instead) -->
+    <div class="particles" id="particles">
+      <!-- Template: each particle will have inline style for angle/distance used by CSS explode animation -->
+      <!-- JS can generate and set --tx/--ty and later animate towards logo coordinates (--lx/--ly) -->
+      <!-- Pre-generate 36 particles as starting point -->
+      <!-- We'll assign random directions in inline styles (example) -->
+      <!-- You can remove these and let your JS create dynamic ones -->
+      <!-- NOTE: --d (distance) in px gives approximate explosion displacement -->
+      <span class="particle" style="--tx: -120px; --ty: -90px;"></span>
+      <span class="particle" style="--tx: 80px; --ty: -140px;"></span>
+      <span class="particle" style="--tx: 150px; --ty: -40px;"></span>
+      <span class="particle" style="--tx: -160px; --ty: 20px;"></span>
+      <span class="particle" style="--tx: 100px; --ty: 90px;"></span>
+      <span class="particle" style="--tx: -80px; --ty: 140px;"></span>
+      <span class="particle" style="--tx: 30px; --ty: -200px;"></span>
+      <span class="particle" style="--tx: -200px; --ty: -20px;"></span>
+      <span class="particle" style="--tx: 200px; --ty: 40px;"></span>
+      <span class="particle" style="--tx: -40px; --ty: 210px;"></span>
+      <span class="particle" style="--tx: 60px; --ty: 180px;"></span>
+      <span class="particle" style="--tx: -100px; --ty: -180px;"></span>
+      <span class="particle" style="--tx: 0px; --ty: -240px;"></span>
+      <span class="particle" style="--tx: 220px; --ty: -100px;"></span>
+      <span class="particle" style="--tx: -240px; --ty: 70px;"></span>
+      <span class="particle" style="--tx: 180px; --ty: 160px;"></span>
+      <span class="particle" style="--tx: -160px; --ty: -140px;"></span>
+      <span class="particle" style="--tx: 40px; --ty: 260px;"></span>
+      <span class="particle" style="--tx: -300px; --ty: 10px;"></span>
+      <span class="particle" style="--tx: 300px; --ty: -10px;"></span>
+      <span class="particle" style="--tx: -50px; --ty: -320px;"></span>
+      <span class="particle" style="--tx: 360px; --ty: 60px;"></span>
+      <span class="particle" style="--tx: -220px; --ty: 220px;"></span>
+      <span class="particle" style="--tx: 120px; --ty: -300px;"></span>
+      <span class="particle" style="--tx: -120px; --ty: 300px;"></span>
+      <span class="particle" style="--tx: 60px; --ty: 320px;"></span>
+      <span class="particle" style="--tx: -360px; --ty: -70px;"></span>
+      <span class="particle" style="--tx: 260px; --ty: 240px;"></span>
+      <span class="particle" style="--tx: -420px; --ty: 120px;"></span>
+      <span class="particle" style="--tx: 420px; --ty: -140px;"></span>
+      <span class="particle" style="--tx: -180px; --ty: 380px;"></span>
+      <span class="particle" style="--tx: 180px; --ty: -380px;"></span>
+      <span class="particle" style="--tx: 0px; --ty: 420px;"></span>
+      <span class="particle" style="--tx: -460px; --ty: -200px;"></span>
+      <span class="particle" style="--tx: 520px; --ty: 10px;"></span>
+      <span class="particle" style="--tx: -120px; --ty: -40px;"></span>
+      <span class="particle" style="--tx: 80px; --ty: 50px;"></span>
+    </div>
+
+    <!-- Logo (SVG placeholder) -->
+    <div class="logo-wrap" id="logoWrap" aria-hidden="true">
+      <svg class="logo-svg" viewBox="0 0 400 120" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="grad1" x1="0" x2="1">
+            <stop offset="0%" stop-color="#c8f1ff"/>
+            <stop offset="100%" stop-color="#69c2ff"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Replace this text with your SVG logo or shape -->
+        <text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle">NOM DU BLOG</text>
+      </svg>
+      <div class="logo-shimmer" aria-hidden="true"></div>
+    </div>
+
+    <!-- simple hidden audio element: replace src with your explosion & chime files -->
+    <audio id="sfx-explosion" preload="auto">
+      <!-- Remplace par tes fichiers: explosion court (ex: explosion.mp3) -->
+      <source src="explosion.ogg" type="audio/ogg">
+      <source src="explosion.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="attribution">Animation d'intro — appuie sur espace pour relancer</div>
+  </div>
+
+  <!-- Contenu de la page (sous le splash) -->
+  <main class="page" id="page">
+    <header style="padding:36px; text-align:center;">
+      <h1>Accueil — Ton blog</h1>
+      <p style="opacity:.6">Voici le contenu principal — il apparaît après la splash.</p>
+    </header>
+    <section style="padding:24px; max-width:900px; margin:0 auto;">
+      <p>Place ici ton contenu de la page d'accueil. Le splash est conçu pour s’estomper et laisser place à cette zone.</p>
+    </section>
+  </main>
+
+  <script>
+    /* ===== Minimal JS pour déclencher l'animation et synchroniser le son =====
+       Tu peux remplacer / étendre ce script pour:
+       - générer dynamiquement les particules,
+       - calculer des positions de formation en lisant un SVG (getPointAtLength),
+       - animer via Web Animations API ou requestAnimationFrame pour des trajectoires fluides,
+       - gérer le focus/accessibilité, etc.
+    */
+
+    (function () {
+      const splash = document.getElementById('splash');
+      const core = document.getElementById('core');
+      const particles = Array.from(document.querySelectorAll('.particle'));
+      const logoWrap = document.getElementById('logoWrap');
+      const page = document.getElementById('page');
+      const sfx = document.getElementById('sfx-explosion');
+
+      const TIMINGS = {
+        chargeStart: 0,          // start immediately
+        explosionAt: 1000,      // ms -> explosion moment (1s)
+        formationStart: 1350,   // ms -> particles begin to gather (1.35s)
+        logoShowAt: 3500,       // ms -> logo fully formed (3.5s)
+        finishAt: 5000          // ms -> transition to page (5s)
+      };
+
+      // Start sequence
+      function startSplash() {
+        // reset
+        splash.classList.remove('done');
+        page.classList.remove('visible');
+        logoWrap.classList.remove('show');
+
+        // show core (charge)
+        core.style.opacity = '1';
+
+        // small delay before "charging" visual (to allow CSS pulse)
+        setTimeout(() => {
+          // explosion sound exactly at explosionAt
+          setTimeout(() => {
+            // play sound (if available and allowed by browser)
+            if (sfx && sfx.play) {
+              // try/catch because autoplay policies may block audio until user interacts
+              sfx.currentTime = 0;
+              const p = sfx.play();
+              if (p && p.catch) p.catch(() => {/* play blocked; ignore */});
+            }
+            // add explode class to particles
+            particles.forEach(p => {
+              p.classList.add('explode');
+            });
+          }, TIMINGS.explosionAt - TIMINGS.chargeStart);
+
+          // after explosion, start formation (this demo uses CSS .to-logo to animate)
+          setTimeout(() => {
+            // reveal logo
+            logoWrap.classList.add('show');
+
+            // add to-logo class to let CSS animate particles toward logo positions
+            // In a richer implementation you would compute exact coordinates of each pixel of the logo
+            // and animate each particle individually (via Web Animations API or rAF) to those coordinates.
+            particles.forEach((p, i) => {
+              p.classList.add('to-logo');
+              // Optionally stagger a tiny bit in JS for nicer effect
+              p.style.animationDelay = (1.35 + i * 0.01) + 's';
+            });
+
+          }, TIMINGS.formationStart - TIMINGS.chargeStart);
+
+          // final transition to main page
+          setTimeout(() => {
+            // fade splash out and show main page
+            splash.style.transition = 'opacity .5s ease';
+            splash.style.opacity = '0';
+            page.classList.add('visible');
+
+            // keep splash in DOM but hidden (or remove if you want)
+            setTimeout(() => {
+              splash.style.display = 'none';
+            }, 600);
+          }, TIMINGS.finishAt - TIMINGS.chargeStart);
+        }, 50);
+      }
+
+      // Start on load (some browsers block audio until user interacts; fine)
+      window.addEventListener('load', () => {
+        // small delay so page assets settle
+        setTimeout(startSplash, 80);
+      });
+
+      // allow restarting the animation by pressing Space
+      window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+          // reset styles and restart
+          // restore initial dom for demo purposes
+          splash.style.display = '';
+          splash.style.opacity = '1';
+          document.querySelectorAll('.particle').forEach(p => {
+            p.classList.remove('explode','to-logo');
+            p.style.animationDelay = '';
+          });
+          logoWrap.classList.remove('show');
+          page.classList.remove('visible');
+
+          // small delay to allow reflow
+          setTimeout(startSplash, 80);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
